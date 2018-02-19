@@ -2,7 +2,7 @@
 
 # Autores:
 
-    -Lidia Concepción Echebarría
+    -Lidia Concepción Echeverría
     -Pedro David González Vázquez
 
 # Objetivos:
