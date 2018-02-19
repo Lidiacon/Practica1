@@ -21,27 +21,29 @@ var MemoryGame = MemoryGame || {};
 MemoryGame.prototype.initGame = function(){
 	//Bucle para añadir las cartas en posiciones aleatorias
 
-	/*for(let i = 0; i < 18; i++){
-		let random = Math.floor(Math.random() * 18);
-		if(cards[random] == null){
-			cards[random] = {card:i, state:"off"};
+	let cardNames = ["8-ball", "potato","dinosaur","kronos","rocket","unicorn","guy","zeppelin"];
+
+	for(let i = 0; i < 16; i++){
+		let random = Math.floor(Math.random() * 16);
+		if(game.cards[random] == undefined){
+			game.cards[random] = new MemoryGameCard(cardNames[Math.floor(i/2)]);
 		}
 		else{
-			for(let j = random;;j = j++ % 18){
-				if(cards[j] == null){
-					cards[j] = {card:i, state:"off"};
+			for(let j = random; ;j = (++j % 16)){
+				if(game.cards[j] == undefined){
+					game.cards[j] = new MemoryGameCard(cardNames[Math.floor(i/2)]);
 					break;
 				}
 			}
 		}
-	}*/
+	}
 	
 	//Bucle para añadir las cartas en orden
 
-	let cardNames = ["8-ball", "potato","dinosaur","kronos","rocket","unicorn","guy","zeppelin"];
+	/*
 	for(let i = 0; i < 16; i++){
 		this.cards.push(new MemoryGameCard(cardNames[Math.floor(i/2)]));
-	}
+	}*/
 
 	this.loop();
 
@@ -49,14 +51,10 @@ MemoryGame.prototype.initGame = function(){
 
 MemoryGame.prototype.draw = function(){
 
-	//console.log("Dibujando una carta");
 	game.gs.drawMessage(game.msg);
 	for(let i = 0; i < 16; i++)
-		if(game.cards[i].state == "reverse")
-			game.gs.draw("back",i);	
-		else
-			game.gs.draw(game.cards[i].id, i);	
-
+		game.cards[i].draw(game.gs, i); 
+	
 
 }
 
@@ -73,12 +71,11 @@ MemoryGame.prototype.onClick = function(card){
 		return;
 
 	newCard.flip();
+
 	if(game.myCard == null){
 		game.myCard = newCard;
 		return;
 	}
-	
-	
 
 	if(newCard.id == game.myCard.id){
 		newCard.found();
@@ -121,4 +118,11 @@ MemoryGameCard.prototype.found = function(){
 
 MemoryGameCard.prototype.compareTo = function(otherCard){
 	return otherCard.id == this.id;
+}
+
+MemoryGameCard.prototype.draw = function(gs, pos){
+	if(this.state == "reverse")
+			gs.draw("back", pos);	
+		else
+			gs.draw(this.id, pos);
 }
